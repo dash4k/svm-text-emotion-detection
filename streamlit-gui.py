@@ -1,8 +1,6 @@
 import pickle
 import numpy as np
 import streamlit as st
-import matplotlib.pyplot as plt
-import seaborn as sns
 from manualSVM import clean_text, preprocess, vectorize_tfidf, LinearSVM
 
 st.set_page_config(page_title="Text Emotion Classification (SVM)", layout="centered")
