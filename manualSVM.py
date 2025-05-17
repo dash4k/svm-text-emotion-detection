@@ -154,9 +154,9 @@ def cross_validate(X, y, num_classes, num_features, k=5, lr=0.01, C=1.0, epochs=
 
 
 def grid_search(X, y, num_classes, num_features, k=5):
-    lr_values = [0.01, 0.05, 0.1]
-    C_values = [0.1, 0.5, 1]
-    epoch_values = [50]
+    lr_values = [0.001, 0.01, 0.1]
+    C_values = [0.05, 0.5, 1]
+    epoch_values = [50, 100]
 
     best_score = 0
     best_params = {}

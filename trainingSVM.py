@@ -61,8 +61,8 @@ num_features = X.shape[1]
 
 model = OneVSRestSVM(num_classes, num_features, 
                      lr=0.001, 
-                     C=0.05, 
-                     epochs=100)
+                     C=1, 
+                     epochs=50)
 model.fit(X_train, y_train)
 
 # Predict on test set
@@ -87,7 +87,7 @@ plt.figure(figsize=(8,6))
 sns.heatmap(cm, annot=True, fmt="d", cmap="Blues", xticklabels=unique_labels, yticklabels=unique_labels)
 plt.xlabel("Predicted")
 plt.ylabel("True")
-plt.title("Confusion Matrix with Evaluation Metrics")
+plt.title("Heat Map")
 plt.tight_layout()
 plt.show()
 
