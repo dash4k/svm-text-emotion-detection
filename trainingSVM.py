@@ -1,8 +1,9 @@
+import pickle
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 import random
-from manualSVM import clean_text, preprocess, vectorize_tfidf, LinearSVM, compute_idf, load_data, build_vocab, OneVSRestSVM, evaluate_model
+from manualSVM import clean_text, preprocess, vectorize_tfidf, LinearSVM, compute_idf, load_data, build_vocab, OneVSRestSVM, evaluate_model, grid_search
 
 ID_STOPWORDS = {
     "yang", "untuk", "dengan", "pada", "tidak", "dari", "ini", "di", "ke", "dan",
@@ -51,18 +52,14 @@ num_classes = len(unique_labels)
 num_features = X.shape[1]
 
 # Hyperparameter tuning using 5-fold CV
-# best_params = grid_search(X_train, y_train, num_classes, num_features, k=5)
+best_params = grid_search(X_train, y_train, num_classes, num_features, k=5)
 
 # Final training using best parameters
-# model = OneVSRestSVM(num_classes, num_features, 
-#                      lr=best_params['lr'], 
-#                      C=best_params['C'], 
-#                      epochs=best_params['epochs'])
-
 model = OneVSRestSVM(num_classes, num_features, 
-                     lr=0.001, 
-                     C=1, 
-                     epochs=50)
+                     lr=best_params['lr'], 
+                     C=best_params['C'], 
+                     epochs=best_params['epochs'])
+
 model.fit(X_train, y_train)
 
 # Predict on test set
@@ -71,14 +68,6 @@ predictions = model.predict(X_test)
 # Compute accuracy
 accuracy = np.mean(predictions == y_test)
 print(f"Accuracy: {accuracy * 100:.2f}%")
-
-# cm = confusion_matrix_np(y_test, predictions, len(unique_labels))
-# sns.heatmap(cm, annot=True, fmt="d", cmap="Blues", xticklabels=unique_labels, yticklabels=unique_labels)
-# plt.xlabel("Predicted")
-# plt.ylabel("True")
-# plt.title("Confusion Matrix (Test Set) Manual SVM")
-# plt.tight_layout()
-# plt.show()
 
 cm, precision, recall, f1 = evaluate_model(y_test, predictions, len(unique_labels), unique_labels)
 
@@ -90,8 +79,6 @@ plt.ylabel("True")
 plt.title("Heat Map")
 plt.tight_layout()
 plt.show()
-
-import pickle
 
 accuracy = np.mean(predictions == y_test)
 precision = np.mean(precision)  # average across classes
